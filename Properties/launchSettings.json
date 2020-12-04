@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AdventOfCode2020": {
+      "commandName": "Project",
+      "commandLineArgs": "..\\..\\Inputs 5 1"
+    }
+  }
+}
