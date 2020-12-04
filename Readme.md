@@ -1,6 +1,6 @@
 # Advent of Code 2020
 
-## My humble attempt to solve the puzzles
+## My humble attempt to solve the puzzles, see [https://adventofcode.com/](https://adventofcode.com/)
 
 ### Captain's log, Day 4
 
