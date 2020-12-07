@@ -59,7 +59,7 @@ namespace AdventOfCode2020
             return retval;
         }
 
-        private static int SumGroupLetters(List<bool[]> groupletter)
+        private int SumGroupLetters(List<bool[]> groupletter)
         {
             int sum = 0;
 
