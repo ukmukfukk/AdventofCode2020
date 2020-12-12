@@ -7,6 +7,7 @@ namespace AdventOfCode2020
     public class Day11 : IDay
     {
         public IList<string> InputFiles => new List<string> { "input11test.txt", "input11.txt" };
+
         public string Name => "Day 11";
 
         public void SolvePuzzle1(IList<IList<string>> inputs)
