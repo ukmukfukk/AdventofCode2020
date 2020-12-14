@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AdventOfCode2020
 {
@@ -21,78 +19,43 @@ namespace AdventOfCode2020
 
         public void SolvePuzzle2(IList<IList<string>> inputs)
         {
-            // SolvePuzzle2Alternative(inputs[2]);
             foreach (var input in inputs)
             {
                 SolvePuzzle2Alternative(input);
-                SolvePuzzle2(input);
+                SolvePuzzle2(input, input[0] == "1008169" ? 100000000000000 : 0);
             }
         }
 
         private void SolvePuzzle2Alternative(IList<string> input)
         {
             string[] split = input[1].Split(',');
-            Dictionary<int, int> dividers = new Dictionary<int, int>();
+            List<int> dividers = new List<int>();
+            List<int> targetmods = new List<int>();
             for (int i = 0; i < split.Length; i++)
             {
-                if (int.TryParse(split[i], out int div))
+                if (int.TryParse(split[i], out int divider))
                 {
-                    dividers.Add(div, i);
-                }
-            }
-
-            long prod = 1;
-            foreach (var k in dividers.Keys)
-            {
-                prod *= k;
-            }
-
-            List<int> mods;
-            long timestamp = 0;
-            bool found = false;
-            long step = 100000000;
-            long milestone = 0;
-            Dictionary<long, List<int>> modClasses = new Dictionary<long, List<int>>();
-
-            while (!found)
-            {
-                if (timestamp > step + milestone)
-                {
-                    Helper.Logger.Log(timestamp.ToString());
-                    milestone += step;
-                }
-
-                if (modClasses.ContainsKey(timestamp % prod))
-                {
-                    timestamp++;
-                    break;
-                }
-
-                mods = new List<int>();
-                foreach (var k in dividers)
-                {
-                    int mod = k.Key - (int)(timestamp % k.Key);
-                    mod %= k.Key;
-                    mods.Add(mod);
-                }
-
-                found = true;
-                int n = 0;
-                foreach (var k in dividers)
-                {
-                    if (mods[n] != k.Value)
+                    dividers.Add(divider);
+                    int mod = i == 0 ? 0 : divider - i;
+                    while (mod < 0)
                     {
-                        found = false;
-                        break;
+                        mod += divider;
                     }
 
-                    n++;
+                    targetmods.Add(mod);
                 }
+            }
 
-                if (!found)
+            long timestamp = 0;
+            Dictionary<long, List<int>> modClasses = new Dictionary<long, List<int>>();
+
+            for (int i = 0; i < dividers.Count; i++)
+            {
+                long product = GetProductForFirstN(dividers, i);
+
+                while (timestamp % dividers[i] != targetmods[i])
                 {
-                    modClasses.Add(timestamp, mods);
-                    timestamp++;
+                    timestamp += product;
                 }
             }
 
@@ -105,6 +68,17 @@ namespace AdventOfCode2020
             {
                 Helper.Logger.Log("Name", $"FirstTimestamp: {timestamp}");
             }
+        }
+
+        private long GetProductForFirstN(List<int> dividers, int n)
+        {
+            long prod = 1;
+            for (int i = 0; i < n; i++)
+            {
+                prod *= dividers[i];
+            }
+
+            return prod;
         }
 
         private void SolvePuzzle1(IList<string> input)
@@ -157,15 +131,15 @@ namespace AdventOfCode2020
             return retval;
         }
 
-        private void SolvePuzzle2(IList<string> input)
+        private void SolvePuzzle2(IList<string> input, long start = 0)
         {
             string[] split = input[1].Split(',');
             var buses = split.Select(s => int.TryParse(s, out int i) ? i : -1).ToList();
 
-            long timestamp = 0;
+            long timestamp = start;
             bool found = false;
-            long step = 100000000;
-            long milestone = 0;
+            long step = 1000000000;
+            long milestone = start;
 
             while (!found)
             {
@@ -175,7 +149,7 @@ namespace AdventOfCode2020
                     milestone += step;
                 }
 
-                found = CheckTS(buses, ref timestamp);
+                found = CheckTS(buses, timestamp);
 
                 if (!found)
                 {
@@ -194,12 +168,11 @@ namespace AdventOfCode2020
             }
         }
 
-        private bool CheckTS(List<int> buses, ref long timestamp)
+        private bool CheckTS(List<int> buses, long timestamp)
         {
             bool found;
-            timestamp = FindDepart(buses[0], timestamp);
+            long runner = FindDepart(buses[0], timestamp);
             int b = 1;
-            long runner = timestamp;
             found = true;
             int diff = 1;
 
