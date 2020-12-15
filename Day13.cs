@@ -50,8 +50,6 @@ namespace AdventOfCode2020
             }
 
             long timestamp = 0;
-            Dictionary<long, List<int>> modClasses = new Dictionary<long, List<int>>();
-
             for (int i = 0; i < dividers.Count; i++)
             {
                 long product = GetProductForFirstN(dividers, i);
@@ -122,12 +120,6 @@ namespace AdventOfCode2020
         private long FindDepart(int bus, long ts)
         {
             long retval;
-            /*retval = 0;
-             * while (retval < ts)
-            {
-                retval += bus;
-            }*/
-
             long div = ts / bus;
             retval = (div + 1) * bus;
 

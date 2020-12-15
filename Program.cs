@@ -52,6 +52,11 @@ namespace AdventOfCode2020
         {
             string typeString = $"AdventOfCode2020.Day{dayNo}";
             Type type = Assembly.GetExecutingAssembly().GetType(typeString);
+            if (type == null)
+            {
+                throw new Exception($"No class for day {dayNo}");
+            }
+
             return (IDay)Activator.CreateInstance(type);
         }
     }
