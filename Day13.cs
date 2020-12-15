@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AdventOfCode2020
 {
@@ -135,13 +138,21 @@ namespace AdventOfCode2020
         {
             string[] split = input[1].Split(',');
             var buses = split.Select(s => int.TryParse(s, out int i) ? i : -1).ToList();
-
+            int taskcnt = 8;
             long timestamp = start;
-            bool found = false;
             long step = 1000000000;
+            long range = 1000000000;
             long milestone = start;
+            List<Task<long>> tasks = new List<Task<long>>();
+            long[] results = new long[taskcnt];
+            for (int i = 0; i < taskcnt; i++)
+            {
+                object param = new Tuple<List<int>, long, long>(buses, timestamp, range);
+                tasks.Add(Task.Factory.StartNew(new Func<object, long>(CheckTSRange), param));
+                timestamp += range;
+            }
 
-            while (!found)
+            while (true)
             {
                 if (timestamp > step + milestone)
                 {
@@ -149,12 +160,32 @@ namespace AdventOfCode2020
                     milestone += step;
                 }
 
-                found = CheckTS(buses, timestamp);
-
-                if (!found)
+                int? id = GetFinishedTask(tasks);
+                if (id != null)
                 {
-                    timestamp++;
+                    if (tasks[id.Value].Result != -1)
+                    {
+                        timestamp = tasks[id.Value].Result;
+                        for (int i = 0; i < taskcnt; i++)
+                        {
+                            while (i != id && !tasks[i].IsCompleted)
+                            {
+                                tasks[i].Wait();
+                            }
+
+                            results[i] = tasks[i].Result;
+                        }
+
+                        timestamp = results.Where(r => r != -1).Min();
+                        break;
+                    }
+
+                    object param = new Tuple<List<int>, long, long>(buses, timestamp, range);
+                    tasks[id.Value] = Task.Factory.StartNew(new Func<object, long>(CheckTSRange), param);
+                    timestamp += range;
                 }
+
+                Thread.Sleep(100);
             }
 
             if (input.Count > 2)
@@ -168,14 +199,45 @@ namespace AdventOfCode2020
             }
         }
 
-        private bool CheckTS(List<int> buses, long timestamp)
+        private int? GetFinishedTask(List<Task<long>> tasks)
+        {
+            for (int i = 0; i < tasks.Count; i++)
+            {
+                if (tasks[i].IsCompleted)
+                {
+                    return i;
+                }
+            }
+
+            return null;
+        }
+
+        private long CheckTSRange(object param)
+        {
+            var paramT = (Tuple<List<int>, long, long>)param;
+            var buses = paramT.Item1;
+            var timestamp = paramT.Item2;
+            var range = paramT.Item3;
+            long retval = timestamp;
+            while (retval < timestamp + range)
+            {
+                if (CheckTS(buses, ref retval))
+                {
+                    return retval;
+                }
+            }
+
+            return -1;
+        }
+
+        private bool CheckTS(List<int> buses, ref long timestamp)
         {
             bool found;
-            long runner = FindDepart(buses[0], timestamp);
+            timestamp = FindDepart(buses[0], timestamp);
             int b = 1;
             found = true;
             int diff = 1;
-
+            long runner = timestamp;
             while (found && b < buses.Count)
             {
                 if (buses[b] == -1)
