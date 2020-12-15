@@ -63,11 +63,11 @@ namespace AdventOfCode2020
             if (input.Count > 2)
             {
                 long expected = long.Parse(input[2]);
-                Helper.Logger.Log("Name", $"FirstTimestamp: {timestamp}, {(expected == timestamp ? "TEST PASSED" : "TEST FAILED")}");
+                Helper.Logger.Log(Name, $"FirstTimestamp: {timestamp}, {(expected == timestamp ? "TEST PASSED" : "TEST FAILED")}");
             }
             else
             {
-                Helper.Logger.Log("Name", $"FirstTimestamp: {timestamp}");
+                Helper.Logger.Log(Name, $"FirstTimestamp: {timestamp}");
             }
         }
 
@@ -183,11 +183,11 @@ namespace AdventOfCode2020
             if (input.Count > 2)
             {
                 long expected = long.Parse(input[2]);
-                Helper.Logger.Log("Name", $"FirstTimestamp: {timestamp}, {(expected == timestamp ? "TEST PASSED" : "TEST FAILED")}");
+                Helper.Logger.Log(Name, $"FirstTimestamp: {timestamp}, {(expected == timestamp ? "TEST PASSED" : "TEST FAILED")}");
             }
             else
             {
-                Helper.Logger.Log("Name", $"FirstTimestamp: {timestamp}");
+                Helper.Logger.Log(Name, $"FirstTimestamp: {timestamp}");
             }
         }
 
