@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace AdventOfCode2020
 {
-    internal static class Helper
+    public static class Helper
     {
         private static readonly Dictionary<CharRange, char[]> CharRanges;
 
@@ -62,6 +63,24 @@ namespace AdventOfCode2020
             return true;
         }
 
+        public static IEnumerable<IList<int>> GetPermuations(IList<int> values)
+        {
+            return GetPermuations(values, new List<int>());
+        }
+
+        public static bool LastNMatch(this IList<int> main, List<int> lastN, int n)
+        {
+            for (int i = n - 1; i >= 0; i--)
+            {
+                if (main[main.Count - n + i] != lastN[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         internal static IList<IList<string>> GetInputs(string inputDir, IList<string> inputFiles)
         {
             var retval = new List<IList<string>>();
@@ -72,6 +91,26 @@ namespace AdventOfCode2020
             }
 
             return retval;
+        }
+
+        private static IEnumerable<IList<int>> GetPermuations(IList<int> values, IList<int> beginning)
+        {
+            List<IList<int>> retval = new List<IList<int>>();
+            var freevalues = values.Where(v => !beginning.Contains(v)).ToList();
+            if (freevalues.Count() == 0)
+            {
+                retval.Add(beginning);
+                yield return beginning;
+            }
+
+            for (int i = 0; i < freevalues.Count(); i++)
+            {
+                var copy = new List<int>(beginning) { freevalues[i] };
+                foreach (var a in GetPermuations(values, copy))
+                {
+                    yield return a;
+                }
+            }
         }
 
         private static IList<string> ReadFile(string fileName)

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AdventOfCode2020
 {
-    internal interface ISimpleLogger : ILogger
+    public interface ISimpleLogger : ILogger
     {
         void Log(string message);
 
