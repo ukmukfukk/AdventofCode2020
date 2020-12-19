@@ -4,6 +4,8 @@ using AdventOfCode2020;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AdventOfCode2020.Day19Help;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode2020Test
 {
@@ -56,6 +58,35 @@ namespace AdventOfCode2020Test
             }
 
             Console.WriteLine(sb);
+        }
+
+        [TestMethod]
+        public void Test19()
+        {
+            List<string> s = new List<string>
+            {
+                "0: 1 2",
+                "1: 3 4 | 3 1 4",
+                "2: \"c\"",
+                "3: \"a\"",
+                "4: \"b\"",
+                "",
+            };
+            var day = new Day19();
+
+            day.GetEmptyLineAndRuleCnt(s, out int el, out int rulecnt);
+            Rule.Rules = day.GetRules(s, el, rulecnt);
+            Console.WriteLine(Rule.Rules[0].Pattern);
+
+            Regex regex = new Regex("^" + Rule.Rules[0].Pattern + "$");
+
+            Assert.IsTrue(regex.IsMatch("abc"));
+            Assert.IsTrue(regex.IsMatch("aabc"));
+            Assert.IsTrue(regex.IsMatch("abbc"));
+            Assert.IsTrue(regex.IsMatch("aabbc"));
+            Assert.IsFalse(regex.IsMatch("c"));
+            Assert.IsFalse(regex.IsMatch("ab"));
+            Assert.IsFalse(regex.IsMatch("abcc"));
         }
     }
 }

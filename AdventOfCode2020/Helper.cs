@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode2020
 {
@@ -16,6 +18,14 @@ namespace AdventOfCode2020
                 { CharRange.HexaDecimal, new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' } },
             };
         }
+
+        public static Regex EmptyLine => new Regex(@"^\s*$");
+
+        public static Regex WhiteSpace => new Regex(@"\s*");
+
+        public static Regex Digits => new Regex(@"\d+");
+
+        public static Regex Letters => new Regex(@"\p{L}+");
 
         public static ISimpleLogger Logger { get; internal set; }
 
@@ -79,6 +89,20 @@ namespace AdventOfCode2020
             }
 
             return true;
+        }
+
+        public static bool IsNotNull(int? nullable, out int value)
+        {
+            if (nullable.HasValue)
+            {
+                value = nullable.Value;
+                return true;
+            }
+            else
+            {
+                value = default(int);
+                return false;
+            }
         }
 
         internal static IList<IList<string>> GetInputs(string inputDir, IList<string> inputFiles)
