@@ -21,6 +21,33 @@ namespace AdventOfCode2020
             }
         }
 
+        public Rule[] GetRules(IList<string> input, int el, int rulecnt)
+        {
+            Rule[] retval = new Rule[rulecnt + 1];
+            for (int i = 0; i < el; i++)
+            {
+                string[] split = input[i].Split(':');
+                int id = int.Parse(split[0]);
+                retval[id] = new Rule(id, split[1]);
+            }
+
+            return retval;
+        }
+
+        public void GetEmptyLineAndRuleCnt(IList<string> input, out int el, out int rulecnt)
+        {
+            el = 0;
+            rulecnt = 0;
+            for (el = 0; !Helper.EmptyLine.IsMatch(input[el]); el++)
+            {
+                int temp = int.Parse(input[el].Split(':')[0]);
+                if (temp > rulecnt)
+                {
+                    rulecnt = temp;
+                }
+            }
+        }
+
         protected override void SolvePuzzle1(IList<string> input)
         {
             GetEmptyLineAndRuleCnt(input, out int el, out int rulecnt);
@@ -60,33 +87,6 @@ namespace AdventOfCode2020
         protected override void SolvePuzzle2(IList<string> input)
         {
             SolvePuzzle1(input);
-        }
-
-        public Rule[] GetRules(IList<string> input, int el, int rulecnt)
-        {
-            Rule[] retval = new Rule[rulecnt + 1];
-            for (int i = 0; i < el; i++)
-            {
-                string[] split = input[i].Split(':');
-                int id = int.Parse(split[0]);
-                retval[id] = new Rule(id, split[1]);
-            }
-
-            return retval;
-        }
-
-        public void GetEmptyLineAndRuleCnt(IList<string> input, out int el, out int rulecnt)
-        {
-            el = 0;
-            rulecnt = 0;
-            for (el = 0; !Helper.EmptyLine.IsMatch(input[el]); el++)
-            {
-                int temp = int.Parse(input[el].Split(':')[0]);
-                if (temp > rulecnt)
-                {
-                    rulecnt = temp;
-                }
-            }
         }
     }
 }

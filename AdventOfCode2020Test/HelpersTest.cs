@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using AdventOfCode2020.Day19Help;
 using System.Text.RegularExpressions;
+using AdventOfCode2020.Day20Help;
 
 namespace AdventOfCode2020Test
 {
@@ -87,6 +88,34 @@ namespace AdventOfCode2020Test
             Assert.IsFalse(regex.IsMatch("c"));
             Assert.IsFalse(regex.IsMatch("ab"));
             Assert.IsFalse(regex.IsMatch("abcc"));
+        }
+
+        [TestMethod]
+        public void FindSeamonster()
+        {
+            bool[,] map = new bool[,]
+            {
+                { false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,false, },
+                { true,false,false,false,false,true,true,false,false,false,false,true,true,false,false,false,false,true,true,true, },
+                { false,true,false,false,true,false,false,true,false,false,true,false,false,true,false,false,true,false,false,false,},
+            };
+
+            Day20 day = new Day20();
+            Tile tile = new Tile(0, map);
+            Tile variant = tile.Variations[0];
+            int v = 0;
+            SeaMonster seaMonster = new SeaMonster();
+            while (!day.HasSeaMonster(variant, seaMonster))
+            {
+                v++;
+                if (v == tile.Variations.Count)
+                {
+                    Assert.Fail("No seamonster found");
+                }
+
+                variant = tile.Variations[v];
+            }
+
         }
     }
 }
