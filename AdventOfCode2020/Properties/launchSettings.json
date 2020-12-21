@@ -2,7 +2,7 @@
   "profiles": {
     "AdventOfCode2020": {
       "commandName": "Project",
-      "commandLineArgs": "..\\..\\Inputs 20 2"
+      "commandLineArgs": "..\\..\\Inputs 21 2"
     }
   }
 }
