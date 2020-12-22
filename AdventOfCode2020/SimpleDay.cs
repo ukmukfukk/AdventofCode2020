@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace AdventOfCode2020
 {
@@ -24,6 +25,16 @@ namespace AdventOfCode2020
             {
                 SolvePuzzle2(input);
             }
+        }
+
+        public virtual void Log(string message = "", LogLevel logLevel = LogLevel.Error)
+        {
+            Helper.Logger.Log($"{Name} {message}", logLevel);
+        }
+
+        public virtual void LogNoName(string message = "", LogLevel logLevel = LogLevel.Error)
+        {
+            Helper.Logger.Log($"{message}", logLevel);
         }
 
         protected abstract void SolvePuzzle1(IList<string> input);

@@ -6,10 +6,12 @@ namespace AdventOfCode2020
 {
     public interface ISimpleLogger : ILogger
     {
-        void Log(string message);
+        public LogLevel LogLevel { get; }
 
-        void Log(string name, string message);
+        void Log(string message, LogLevel logLevel = LogLevel.Error);
 
-        void Log(Exception e, [CallerMemberName] string name = "");
+        void Log(string name, string message, LogLevel logLevel = LogLevel.Error);
+
+        void Log(Exception e, [CallerMemberName] string name = "", LogLevel logLevel = LogLevel.Error);
     }
 }
