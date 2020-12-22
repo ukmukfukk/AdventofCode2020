@@ -80,7 +80,7 @@ namespace AdventOfCode2020.Day19Help
                             return pattern = SubRules[1].Pattern;
                         }
 
-                        string sub = "(";
+                        string sub = "(?:";
                         foreach (Rule rule in SubRules)
                         {
                             sub += rule.Pattern + "|";

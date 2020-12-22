@@ -34,7 +34,6 @@ namespace AdventOfCode2020
 
         public void GetEmptyLineAndRuleCnt(IList<string> input, out int el, out int rulecnt)
         {
-            el = 0;
             rulecnt = 0;
             for (el = 0; !Helper.EmptyLine.IsMatch(input[el]); el++)
             {
@@ -63,19 +62,23 @@ namespace AdventOfCode2020
                     valid = bool.Parse(split[1]);
                 }
 
-                bool match = regex.IsMatch(s);
-                if (match)
+                Match match = regex.Match(s);
+                bool ismatch = match.Groups.Count == 1 ? match.Success :
+                    match.Groups[3].Captures.Count > 0 &&
+                    match.Groups[1].Captures.Count + match.Groups[2].Captures.Count - match.Groups[3].Captures.Count >= 1;
+
+                if (ismatch)
                 {
                     validcnt++;
                 }
 
                 if (valid.HasValue)
                 {
-                    Helper.Logger.Log(Name, $"{s}: {match}, {(match == valid.Value ? "Pass" : "Fail")}");
+                    Helper.Logger.Log(Name, $"{s}: {ismatch}, {(ismatch == valid.Value ? "Pass" : "Fail")}");
                 }
                 else
                 {
-                    Helper.Logger.Log(Name, $"{s}: {match}");
+                    Helper.Logger.Log(Name, $"{s}: {ismatch}");
                 }
             }
 
