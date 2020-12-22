@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using AdventOfCode2020.Day18Help;
 

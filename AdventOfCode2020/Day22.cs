@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AdventOfCode2020.Day22Help;
 using Microsoft.Extensions.Logging;
 
