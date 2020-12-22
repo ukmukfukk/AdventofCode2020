@@ -131,6 +131,18 @@ namespace AdventOfCode2020
             return retval;
         }
 
+        internal static Dictionary<string, IList<string>> GetInputsDict(string inputDir, IList<string> inputFiles)
+        {
+            var retval = new Dictionary<string, IList<string>>();
+
+            foreach (var inputfile in inputFiles)
+            {
+                retval.Add(inputfile, ReadFile(Path.Combine(inputDir, inputfile)));
+            }
+
+            return retval;
+        }
+
         private static IEnumerable<IList<int>> GetPermuations(IList<int> values, IList<int> beginning)
         {
             List<IList<int>> retval = new List<IList<int>>();

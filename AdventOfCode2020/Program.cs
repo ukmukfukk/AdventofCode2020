@@ -29,12 +29,30 @@ namespace AdventOfCode2020
                 }
 
                 IDay day = InstantiateDay(dayNo);
-                var inputs = Helper.GetInputs(args[0], day.InputFiles);
-                SolvePuzzle(puzzleNo, day, inputs);
+                if (day is DayUsingInputNames duin)
+                {
+                    var inputs = Helper.GetInputsDict(args[0], duin.InputFiles);
+                    SolvePuzzle(puzzleNo, duin, inputs);
+                }
+                else
+                {
+                    var inputs = Helper.GetInputs(args[0], day.InputFiles);
+                    SolvePuzzle(puzzleNo, day, inputs);
+                }
             }
             catch (Exception e)
             {
                 Helper.Logger.Log(e);
+            }
+        }
+
+        private static void SolvePuzzle(int puzzleNo, DayUsingInputNames day, Dictionary<string, IList<string>> inputs)
+        {
+            switch (puzzleNo)
+            {
+                case 1: day.SolvePuzzle1(inputs); break;
+                case 2: day.SolvePuzzle2(inputs); break;
+                default: throw new Exception($"No puzzle for puzzle number {puzzleNo}");
             }
         }
 

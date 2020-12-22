@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
 
@@ -12,16 +11,16 @@ namespace AdventOfCode2020
         public ConsoleLogger()
         {
             formatter = (s, e) => e.Message;
-            LogLevel = LogLevel.Warning;
+            MinLogLevel = LogLevel.Warning;
         }
 
         public ConsoleLogger(LogLevel logLevel)
         {
             formatter = (s, e) => e.Message;
-            LogLevel = logLevel;
+            MinLogLevel = logLevel;
         }
 
-        public LogLevel LogLevel { get; }
+        public LogLevel MinLogLevel { get; }
 
         public IDisposable BeginScope<TState>(TState state)
         {
@@ -30,7 +29,7 @@ namespace AdventOfCode2020
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            return logLevel >= LogLevel;
+            return logLevel >= MinLogLevel;
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)

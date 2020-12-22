@@ -1,40 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Logging;
+﻿using System.Collections.Generic;
 
 namespace AdventOfCode2020
 {
-    public abstract class SimpleDay : IDay
+    public abstract class SimpleDay : LoggingDay
     {
-        public abstract IList<string> InputFiles { get; }
-
-        public abstract string Name { get; }
-
-        public virtual void SolvePuzzle1(IList<IList<string>> inputs)
+        public override void SolvePuzzle1(IList<IList<string>> inputs)
         {
-            foreach (var input in inputs)
+            for (int i = 0; i < inputs.Count; i++)
             {
-                SolvePuzzle1(input);
+                SolvePuzzle1(inputs[i]);
             }
         }
 
-        public virtual void SolvePuzzle2(IList<IList<string>> inputs)
+        public override void SolvePuzzle2(IList<IList<string>> inputs)
         {
-            foreach (var input in inputs)
+            for (int i = 0; i < inputs.Count; i++)
             {
-                SolvePuzzle2(input);
+                SolvePuzzle2(inputs[i]);
             }
-        }
-
-        public virtual void Log(string message = "", LogLevel logLevel = LogLevel.Error)
-        {
-            Helper.Logger.Log($"{Name} {message}", logLevel);
-        }
-
-        public virtual void LogNoName(string message = "", LogLevel logLevel = LogLevel.Error)
-        {
-            Helper.Logger.Log($"{message}", logLevel);
         }
 
         protected abstract void SolvePuzzle1(IList<string> input);

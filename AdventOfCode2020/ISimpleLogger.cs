@@ -6,7 +6,7 @@ namespace AdventOfCode2020
 {
     public interface ISimpleLogger : ILogger
     {
-        public LogLevel LogLevel { get; }
+        public LogLevel MinLogLevel { get; }
 
         void Log(string message, LogLevel logLevel = LogLevel.Error);
 
