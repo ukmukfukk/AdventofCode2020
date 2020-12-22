@@ -100,7 +100,21 @@ namespace AdventOfCode2020
             }
             else
             {
-                value = default(int);
+                value = default;
+                return false;
+            }
+        }
+
+        public static bool IsNotNull(long? nullable, out long value)
+        {
+            if (nullable.HasValue)
+            {
+                value = nullable.Value;
+                return true;
+            }
+            else
+            {
+                value = default;
                 return false;
             }
         }

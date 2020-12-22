@@ -32,6 +32,15 @@ namespace AdventOfCode2020
         {
             List<Tile> tiles = ReadTiles(input);
             Tile[,] tilemap = ResolveMap(tiles);
+            var expected = ReadExpected(input);
+            long? expectedmulti = null;
+
+            if (expected != null)
+            {
+                int max = expected.GetLength(0) - 1;
+                expectedmulti = expected[0, 0] * expected[0, max] * expected[max, 0] * expected[max, max];
+            }
+
             Tuple<int, int> topleft = null;
             Tuple<int, int> bottomright = null;
             FindCorners(tilemap, ref topleft, ref bottomright);
@@ -41,7 +50,14 @@ namespace AdventOfCode2020
                 tilemap[topleft.Item1, bottomright.Item2].Id *
                 tilemap[bottomright.Item1, bottomright.Item2].Id;
 
-            Helper.Logger.Log(Name, $"sum: {multi}");
+            if (Helper.IsNotNull(expectedmulti, out long exm))
+            {
+                Helper.Logger.Log(Name, $"multi: {multi}, expected: {exm} {(exm == multi ? "PASS" : "FAIL")}");
+            }
+            else
+            {
+                Helper.Logger.Log(Name, $"multi: {multi}");
+            }
         }
 
         protected override void SolvePuzzle2(IList<string> input)
@@ -281,7 +297,7 @@ namespace AdventOfCode2020
             return true;
         }
 
-        private int[,] ReadExpected(IList<string> input)
+        private long[,] ReadExpected(IList<string> input)
         {
             int i = 0;
             while (i < input.Count && !input[i].Equals("Expected"))
@@ -296,7 +312,7 @@ namespace AdventOfCode2020
 
             i++;
 
-            int[,] retval = new int[input.Count - i, input.Count - i];
+            long[,] retval = new long[input.Count - i, input.Count - i];
             for (int k = 0; k + i < input.Count; k++)
             {
                 string[] line = input[k + i].Split("    ");
