@@ -325,13 +325,16 @@ namespace AdventOfCode2020
 
             if (targeti == cupsa.Length - 1)
             {
-                cupsa[0] = cupsa[targeti];
-                for (i = cupsa.Length - 2; i >= 4; i--)
+                for (i = 4; i < cupsa.Length; i++)
                 {
-                    cupsa[i + 1] = cupsa[i];
+                    cupsa[i - 4] = cupsa[i];
                 }
 
-                cupsa[4] = currentv;
+                cupsa[i - 4] = taken[0];
+                cupsa[i - 3] = taken[1];
+                cupsa[i - 2] = taken[2];
+                cupsa[i - 1] = currentv;
+
                 return;
             }
 
@@ -356,29 +359,6 @@ namespace AdventOfCode2020
             }
 
             cupsa[i] = currentv;
-
-            //int[] re = new int[cupsa.Length];
-            //int items;
-
-            //for (items = 0; items <= targeti - 4; items++)
-            //{
-            //    re[items] = cupsa[items + 4];
-            //}
-
-            //for (int i = 0; i < taken.Length; i++)
-            //{
-            //    re[items] = taken[i];
-            //    items++;
-            //}
-
-            //for (int i = targeti + 1; i < cupsa.Length; i++)
-            //{
-            //    re[items] = cupsa[i];
-            //    items++;
-            //}
-
-            //re[cupsa.Length - 1] = cupsa[0];
-            //cupsa = re;
         }
 
         private string GetOrder2()
