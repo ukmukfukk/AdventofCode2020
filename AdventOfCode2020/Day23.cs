@@ -7,40 +7,18 @@ namespace AdventOfCode2020
 {
     public class Day23 : DayUsingInputNames
     {
-        private List<int> cups;
-        public override IList<string> InputFiles => new List<string> { "inputcustom.txt", "input23test.txt", "input23.txt" };
+        public override IList<string> InputFiles => new List<string> { "input23test.txt", "input23.txt" };
 
         public override string Name => "Day 23";
 
-        public List<int> Cups { get => cups; private set => cups = value; }
-
         public int Current { get; private set; }
 
-        public string ListString => string.Join(", ", Cups);
-
-        public string Window
+        public string GetList1String(int[] arr)
         {
-            get
-            {
-                int i = Cups.IndexOf(1);
-                if (i < Cups.Count - 21 && i > 20)
-                {
-                    return string.Join(", ", Cups.Skip(i - 20).Take(40));
-                }
-
-                return string.Empty;
-            }
+            return GetList1String(arr.ToList());
         }
 
-        public string List1String
-        {
-            get
-            {
-                return GetList1String(Cups);
-            }
-        }
-
-        private string GetList1String(List<int> list)
+        public string GetList1String(List<int> list)
         {
             int i = list.IndexOf(1);
             string s = "1, ";
@@ -58,170 +36,96 @@ namespace AdventOfCode2020
             return s;
         }
 
-        private List<int> GetList1(List<int> list)
+        public string GetOrder2(int[] arr)
         {
-            int i = list.IndexOf(1);
-            List<int> re = new List<int>(1);
-            if (i < list.Count - 1)
+            int i = 0;
+            while (arr[i] != 1)
             {
-                re.AddRange(list.Skip(i + 1));
+                i++;
             }
 
-            if (i > 0)
+            if (i < arr.Length - 2)
             {
-                re.AddRange(list.Take(i));
+                return arr[i + 1] + ", " + arr[i + 2];
             }
 
-            return re;
-        }
-
-        public string GetOrder()
-        {
-            int i = Cups.IndexOf(1);
-            string s = string.Empty;
-            if (i < Cups.Count - 1)
+            if (i == arr.Length - 1)
             {
-                s = string.Join(string.Empty, Cups.Skip(i + 1));
+                return arr[0] + ", " + arr[1];
             }
 
-            if (i > 0)
-            {
-                s += string.Join(string.Empty, Cups.Take(i));
-            }
-
-            return s;
+            return arr.Last() + ", " + arr.First();
         }
 
         protected override void SolvePuzzle1(string inputname, IList<string> input)
         {
-            if (inputname == "inputcustom.txt")
-            {
-                return;
-            }
-
             Helper.Logger = new ConsoleLogger(LogLevel.Error);
-            Cups = input[0].Select(c => int.Parse(c.ToString())).ToList();
-            var cupsarray = Cups.ToArray();
+            var cupsarray = input[0].Select(c => int.Parse(c.ToString())).ToArray();
             Log($"start: {DateTime.Now}", LogLevel.Critical);
-            for (int i = 0; i < 100; i++)
+            bool alter = false;
+            string result = string.Empty;
+            if (alter)
             {
-                if (i == 10)
+                throw new NotImplementedException();
+            }
+            else
+            {
+                for (int i = 0; i < 100; i++)
                 {
-                    Log($"{inputname} {GetList1String(cupsarray)}");
-                    //Log($"{inputname} {GetOrder()}");
-                }
-                else
-                {
-                    Log($"{inputname} {GetList1String(cupsarray)}", LogLevel.Information);
-                }
-                int[] cnt = new int[10];
-                for (int j = 0; j < cupsarray.Length; j++)
-                {
-                    cnt[cupsarray[j]]++;
-                }
-
-                for (int j = 0; j < cnt.Length; j++)
-                {
-                    if (cnt[j] > 1)
+                    if (i == 10)
                     {
-                        Log($"duplicate {j}, step {i}", LogLevel.Critical);
+                        Log($"{inputname} {GetList1String(cupsarray)}");
                     }
+                    else
+                    {
+                        Log($"{inputname} {GetList1String(cupsarray)}", LogLevel.Information);
+                    }
+
+                    MakeMove2(ref cupsarray);
                 }
 
-                //MakeMove(ref cups);
-                MakeMove2(ref cupsarray);
+                result = GetList1String(cupsarray);
             }
 
             Log($"end: {DateTime.Now}", LogLevel.Critical);
-
-            Log($"{inputname} {GetList1String(cupsarray)}", LogLevel.Critical);
-            //Log($"{inputname} {GetOrder()}");
+            Log($"{inputname} {result}", LogLevel.Critical);
             Log(string.Empty, LogLevel.Critical);
-        }
-
-        private string GetList1String(int[] arr)
-        {
-            return GetList1String(arr.ToList());
         }
 
         protected override void SolvePuzzle2(string inputname, IList<string> input)
         {
             Helper.Logger = new ConsoleLogger(LogLevel.Error);
-            Cups = input[0].Select(c => int.Parse(c.ToString())).ToList();
-            if (inputname == "inputcustom.txt")
+            var cups = input[0].Select(c => int.Parse(c.ToString())).ToList();
+            cups.AddRange(Enumerable.Range(cups.Max(), 1_000_000 - cups.Max()));
+            var cupsarray = cups.ToArray();
+            bool alter = false;
+            string result = string.Empty;
+            if (alter)
             {
-                return;
+                throw new NotImplementedException();
             }
-
-            Cups.AddRange(Enumerable.Range(Cups.Max(), 1_000_000 - Cups.Max()));
-            var cupsarray = Cups.ToArray();
-
-            int i = 0;
-            //Tuple<int, List<int>> predict = Predict();
-            while (i < 10000000)
+            else
             {
-                MakeMove2(ref cupsarray);
-                //if (predict.Item1 == i)
-                //{
-
-                //}
-
-                if ((i % 1000) == 0)
+                int i = 0;
+                while (i < 10000000)
                 {
-                    Log($"{i}. {inputname} {GetOrder2(cupsarray)}");
+                    MakeMove2(ref cupsarray);
+                    if ((i % 1000) == 0)
+                    {
+                        Log($"{i}. {inputname} {GetOrder2(cupsarray)}");
+                    }
+
+                    i++;
                 }
-                i++;
+
+                result = GetOrder2(cupsarray);
             }
 
-            Log($"{inputname} {GetOrder2(cupsarray)}");
+            Log($"{inputname} {result}");
             Log(string.Empty, LogLevel.Critical);
         }
 
-        private Tuple<int, List<int>> Predict()
-        {
-            int steps = 0;
-            var cups = new List<int>(Cups);
-            int i;
-
-            for (steps = 0; steps < 4; steps++)
-            {
-                MakeMove(ref cups);
-            }
-
-            i = 0;
-            var list1 = GetList1(cups);
-            while (list1[i] < 10)
-            {
-                i++;
-            }
-
-            int m = list1[i] % 4;
-
-            var newlist = new List<int>() { 1 };
-            newlist.AddRange(list1.Take(i));
-            var listrest = new List<int>();
-            for (int j = 10; j <= cups.Max(); j++)
-            {
-                if (j % 4 == m)
-                {
-                    newlist.Add(j);
-                    steps++;
-                }
-                else
-                {
-                    listrest.Add(j);
-                }
-            }
-
-            int maxi = list1.IndexOf(list1.Max());
-
-            newlist.AddRange(list1.Skip(maxi + 1).Take(9 - i - 1));
-            newlist.AddRange(listrest);
-
-            return new Tuple<int, List<int>>(steps - 1, newlist);
-        }
-
-        private void MakeMove(ref List<int> cups)
+        protected void MakeMove(ref List<int> cups)
         {
             var taken = cups.Skip(1).Take(3);
             int current = cups[0];
@@ -264,8 +168,10 @@ namespace AdventOfCode2020
                 after = new List<int>();
             }
 
-            cups = new List<int>(before);
-            cups.Add(target);
+            cups = new List<int>(before)
+            {
+                target,
+            };
             cups.AddRange(taken);
             cups.AddRange(after);
             cups.Add(current);
@@ -359,52 +265,6 @@ namespace AdventOfCode2020
             }
 
             cupsa[i] = currentv;
-        }
-
-        private string GetOrder2()
-        {
-            int i = Cups.IndexOf(1);
-            if (i < Cups.Count - 2)
-            {
-                return Cups[i + 1] + ", " + Cups[i + 2];
-            }
-
-            if (i == Cups.Count - 1)
-            {
-                return Cups[0] + ", " + Cups[1];
-            }
-
-            return Cups.Last() + ", " + Cups.First();
-        }
-
-        private string GetOrder2(int[] arr)
-        {
-            int i = 0;
-            while (arr[i] != 1)
-            {
-                i++;
-            }
-
-            if (i < arr.Length - 2)
-            {
-                return arr[i + 1] + ", " + arr[i + 2];
-            }
-
-            if (i == arr.Length - 1)
-            {
-                return arr[0] + ", " + arr[1];
-            }
-
-            return arr.Last() + ", " + arr.First();
-        }
-
-        private void AddNextN(int n)
-        {
-            int max = Cups.Max();
-            for (int i = max + 1; i <= max + n; i++)
-            {
-                Cups.Add(i);
-            }
         }
     }
 }
