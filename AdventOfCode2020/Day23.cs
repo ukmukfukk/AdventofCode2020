@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AdventOfCode2020.Day23Help;
 using Microsoft.Extensions.Logging;
 
 namespace AdventOfCode2020
@@ -62,15 +63,18 @@ namespace AdventOfCode2020
             Helper.Logger = new ConsoleLogger(LogLevel.Error);
             var cupsarray = input[0].Select(c => int.Parse(c.ToString())).ToArray();
             Log($"start: {DateTime.Now}", LogLevel.Critical);
-            bool alter = false;
+            bool alter = true;
             string result = string.Empty;
+            int moves = 100;
             if (alter)
             {
-                throw new NotImplementedException();
+                Ring ring = new Ring(cupsarray);
+                ring.MakeMoves(moves);
+                result = ring.List1String();
             }
             else
             {
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < moves; i++)
                 {
                     if (i == 10)
                     {
@@ -96,18 +100,21 @@ namespace AdventOfCode2020
         {
             Helper.Logger = new ConsoleLogger(LogLevel.Error);
             var cups = input[0].Select(c => int.Parse(c.ToString())).ToList();
-            cups.AddRange(Enumerable.Range(cups.Max(), 1_000_000 - cups.Max()));
+            cups.AddRange(Enumerable.Range(cups.Max() + 1, 1_000_000 - cups.Max()));
             var cupsarray = cups.ToArray();
-            bool alter = false;
+            bool alter = true;
             string result = string.Empty;
+            int moves = 10_000_000;
             if (alter)
             {
-                throw new NotImplementedException();
+                Ring ring = new Ring(cupsarray);
+                ring.MakeMoves(moves);
+                result = ring.List1Next2();
             }
             else
             {
                 int i = 0;
-                while (i < 10000000)
+                while (i < moves)
                 {
                     MakeMove2(ref cupsarray);
                     if ((i % 1000) == 0)
